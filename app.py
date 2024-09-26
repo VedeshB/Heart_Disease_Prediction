@@ -1,13 +1,13 @@
 # Importing essential libraries
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,app
 import pickle
 import numpy as np
 
 # Load the Random Forest CLassifier model
-filename ="C:\New folder (4)\heart disease\model.pkl"
-model = pickle.load(open(filename, 'nb'))
+filename ="model.pkl"
+model = pickle.load(open(filename, 'rb'))
 
-app.py = Flask(__name__)
+app = Flask(__name__)
 
 @app.route('/')
 def home():
@@ -33,7 +33,12 @@ def predict():
         thal = request.form.get('thal')
         
         data = np.array([[age,sex,cp,trestbps,chol,fbs,restecg,thalach,exang,oldpeak,slope,ca,thal]])
-        my_prediction = model.predict(data)
+        print(data)
+        l=[]
+        for i in data:
+              for j in i:
+                    l.append(float(j))
+        my_prediction = model.predict([l])
         
         return render_template('result.html', prediction=my_prediction)
         
